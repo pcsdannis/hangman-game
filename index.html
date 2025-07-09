@@ -7,8 +7,37 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
+    <!-- Player Setup Screen -->
+    <div class="player-setup" id="player-setup">
+        <h1>Multiplayer Hangman</h1>
+        <div class="setup-form">
+            <label for="num-players">Number of Players:</label>
+            <select id="num-players" onchange="updatePlayerInputs()">
+                <option value="1">1 Player</option>
+                <option value="2">2 Players</option>
+                <option value="3">3 Players</option>
+                <option value="4">4 Players</option>
+            </select>
+            
+            <div id="player-names">
+                <input type="text" id="player-1-name" placeholder="Player 1 Name" required>
+            </div>
+            
+            <button onclick="startGame()">Start Game</button>
+        </div>
+    </div>
+    
+    <!-- Game Screen -->
+    <div class="container" id="game-container" style="display: none;">
         <h1>Hangman Game</h1>
+        
+        <!-- Player Info -->
+        <div class="player-info">
+            <div class="current-turn">
+                Current Turn: <span id="current-player">Player 1</span>
+            </div>
+            <div class="scores" id="scores"></div>
+        </div>
         
         <svg class="hangman" width="250" height="250">
             <!-- Gallows -->
@@ -38,6 +67,16 @@
         </div>
         
         <div class="keyboard" id="keyboard"></div>
+        
+        <!-- Solve Puzzle Section -->
+        <div class="solve-puzzle">
+            <button onclick="showSolveInput()">Solve Puzzle</button>
+            <div id="solve-input" style="display: none;">
+                <input type="text" id="solve-answer" placeholder="Enter your answer">
+                <button onclick="solvePuzzle()">Submit</button>
+                <button onclick="hideSolveInput()">Cancel</button>
+            </div>
+        </div>
         
         <div class="game-over" id="game-over">
             <h2 id="game-over-message"></h2>

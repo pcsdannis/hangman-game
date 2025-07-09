@@ -121,3 +121,137 @@ h1 {
     font-weight: bold;
     color: #007bff;
 }
+
+/* Player Setup Styles */
+.player-setup {
+    text-align: center;
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.setup-form {
+    margin-top: 30px;
+}
+
+.setup-form label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.setup-form select {
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 20px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    width: 200px;
+}
+
+#player-names {
+    margin: 20px 0;
+}
+
+#player-names input {
+    display: block;
+    margin: 10px auto;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    width: 250px;
+}
+
+.setup-form button {
+    padding: 12px 30px;
+    font-size: 18px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.setup-form button:hover {
+    background-color: #0056b3;
+}
+
+/* Player Info Styles */
+.player-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+}
+
+.current-turn {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#current-player {
+    color: #007bff;
+}
+
+.scores {
+    display: flex;
+    gap: 20px;
+}
+
+.player-score {
+    padding: 5px 10px;
+    background-color: #e9ecef;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.player-score.active {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Solve Puzzle Styles */
+.solve-puzzle {
+    margin: 20px 0;
+}
+
+.solve-puzzle button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #17a2b8;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.solve-puzzle button:hover {
+    background-color: #138496;
+}
+
+#solve-input {
+    margin-top: 15px;
+}
+
+#solve-answer {
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    margin-right: 10px;
+    text-transform: lowercase;
+}
+
+#solve-input button {
+    padding: 10px 15px;
+    font-size: 14px;
+    margin: 0 5px;
+}

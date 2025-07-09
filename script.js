@@ -17,6 +17,56 @@ let guessedLetters = [];
 let wrongLetters = [];
 let mistakes = 0;
 
+// Multiplayer variables
+let players = [];
+let currentPlayerIndex = 0;
+let gameActive = false;
+
+// Player setup functions
+function updatePlayerInputs() {
+    const numPlayers = parseInt(document.getElementById('num-players').value);
+    const playerNamesDiv = document.getElementById('player-names');
+    playerNamesDiv.innerHTML = '';
+    
+    for (let i = 1; i <= numPlayers; i++) {
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.id = `player-${i}-name`;
+        input.placeholder = `Player ${i} Name`;
+        input.required = true;
+        playerNamesDiv.appendChild(input);
+    }
+}
+
+function startGame() {
+    const numPlayers = parseInt(document.getElementById('num-players').value);
+    players = [];
+    
+    // Get player names
+    for (let i = 1; i <= numPlayers; i++) {
+        const playerName = document.getElementById(`player-${i}-name`).value.trim();
+        if (!playerName) {
+            alert(`Please enter a name for Player ${i}`);
+            return;
+        }
+        players.push({
+            name: playerName,
+            score: 0,
+            won: false
+        });
+    }
+    
+    // Hide setup screen and show game
+    document.getElementById('player-setup').style.display = 'none';
+    document.getElementById('game-container').style.display = 'block';
+    
+    // Initialize scores display
+    updateScoresDisplay();
+    
+    // Start the game
+    initGame();
+}
+
 // Initialize the game
 function initGame() {
     // Select a random word
@@ -24,6 +74,11 @@ function initGame() {
     guessedLetters = [];
     wrongLetters = [];
     mistakes = 0;
+    gameActive = true;
+    
+    // Reset current player to first player
+    currentPlayerIndex = 0;
+    updateCurrentPlayerDisplay();
     
     // Hide all body parts
     document.querySelectorAll('.body-part').forEach(part => {
@@ -33,6 +88,9 @@ function initGame() {
     // Reset game over display
     document.getElementById('game-over').classList.remove('show');
     
+    // Hide solve input
+    hideSolveInput();
+    
     // Create keyboard
     createKeyboard();
     
@@ -41,6 +99,28 @@ function initGame() {
     
     // Clear wrong letters display
     document.getElementById('wrong-letters').textContent = '';
+}
+
+// Update scores display
+function updateScoresDisplay() {
+    const scoresDiv = document.getElementById('scores');
+    scoresDiv.innerHTML = '';
+    
+    players.forEach((player, index) => {
+        const scoreDiv = document.createElement('div');
+        scoreDiv.className = 'player-score';
+        if (index === currentPlayerIndex) {
+            scoreDiv.classList.add('active');
+        }
+        scoreDiv.textContent = `${player.name}: ${player.score}`;
+        scoresDiv.appendChild(scoreDiv);
+    });
+}
+
+// Update current player display
+function updateCurrentPlayerDisplay() {
+    document.getElementById('current-player').textContent = players[currentPlayerIndex].name;
+    updateScoresDisplay();
 }
 
 // Create the on-screen keyboard
@@ -78,6 +158,8 @@ function updateWordDisplay() {
 
 // Handle letter guess
 function handleGuess(letter) {
+    if (!gameActive) return;
+    
     // Disable the button
     const buttons = document.querySelectorAll('.letter-btn');
     buttons.forEach(btn => {
@@ -107,7 +189,54 @@ function handleGuess(letter) {
         
         if (mistakes === 6) {
             endGame(false);
+        } else {
+            // Move to next player
+            nextTurn();
         }
+    }
+}
+
+// Solve puzzle functions
+function showSolveInput() {
+    if (!gameActive) return;
+    document.getElementById('solve-input').style.display = 'block';
+    document.getElementById('solve-answer').focus();
+}
+
+function hideSolveInput() {
+    document.getElementById('solve-input').style.display = 'none';
+    document.getElementById('solve-answer').value = '';
+}
+
+function solvePuzzle() {
+    if (!gameActive) return;
+    
+    const answer = document.getElementById('solve-answer').value.trim().toLowerCase();
+    
+    if (answer === selectedWord) {
+        // Player wins!
+        players[currentPlayerIndex].won = true;
+        endGame(true);
+    } else {
+        // Wrong answer, draw body part and move to next player
+        alert('Wrong answer!');
+        mistakes++;
+        drawBodyPart();
+        
+        if (mistakes === 6) {
+            endGame(false);
+        } else {
+            hideSolveInput();
+            nextTurn();
+        }
+    }
+}
+
+// Move to next player
+function nextTurn() {
+    if (players.length > 1) {
+        currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+        updateCurrentPlayerDisplay();
     }
 }
 
@@ -123,20 +252,34 @@ function drawBodyPart() {
 function checkWin() {
     const wordWithoutSpaces = document.getElementById('word-display').textContent.replace(/\s/g, '');
     if (wordWithoutSpaces === selectedWord) {
+        players[currentPlayerIndex].won = true;
         endGame(true);
     }
 }
 
 // End the game
 function endGame(won) {
+    gameActive = false;
     const gameOver = document.getElementById('game-over');
     const message = document.getElementById('game-over-message');
     const revealWord = document.getElementById('reveal-word');
     
     gameOver.classList.add('show');
-    message.textContent = won ? 'Congratulations! You won!' : 'Game Over! You lost!';
-    message.style.color = won ? '#28a745' : '#dc3545';
+    
+    if (won) {
+        const winner = players[currentPlayerIndex];
+        winner.score++;
+        message.textContent = `${winner.name} wins!`;
+        message.style.color = '#28a745';
+    } else {
+        message.textContent = 'Game Over! Nobody wins!';
+        message.style.color = '#dc3545';
+    }
+    
     revealWord.textContent = selectedWord.toUpperCase();
+    
+    // Update scores display
+    updateScoresDisplay();
     
     // Disable all letter buttons
     document.querySelectorAll('.letter-btn').forEach(btn => {
@@ -146,8 +289,14 @@ function endGame(won) {
 
 // Reset the game
 function resetGame() {
+    // Reset player won status
+    players.forEach(player => player.won = false);
     initGame();
 }
 
-// Start the game when page loads
-window.onload = initGame;
+// Don't automatically start the game on page load anymore
+window.onload = function() {
+    // Just show the setup screen
+    document.getElementById('player-setup').style.display = 'block';
+    document.getElementById('game-container').style.display = 'none';
+};
