@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hangman Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Hangman Game</h1>
+        
+        <svg class="hangman" width="250" height="250">
+            <!-- Gallows -->
+            <line x1="10" y1="230" x2="110" y2="230" stroke="black" stroke-width="2"/>
+            <line x1="30" y1="230" x2="30" y2="20" stroke="black" stroke-width="2"/>
+            <line x1="30" y1="20" x2="120" y2="20" stroke="black" stroke-width="2"/>
+            <line x1="120" y1="20" x2="120" y2="50" stroke="black" stroke-width="2"/>
+            
+            <!-- Head -->
+            <circle cx="120" cy="70" r="20" stroke="black" stroke-width="2" fill="none" class="body-part" id="head"/>
+            <!-- Body -->
+            <line x1="120" y1="90" x2="120" y2="140" stroke="black" stroke-width="2" class="body-part" id="body"/>
+            <!-- Left arm -->
+            <line x1="120" y1="110" x2="100" y2="130" stroke="black" stroke-width="2" class="body-part" id="left-arm"/>
+            <!-- Right arm -->
+            <line x1="120" y1="110" x2="140" y2="130" stroke="black" stroke-width="2" class="body-part" id="right-arm"/>
+            <!-- Left leg -->
+            <line x1="120" y1="140" x2="100" y2="170" stroke="black" stroke-width="2" class="body-part" id="left-leg"/>
+            <!-- Right leg -->
+            <line x1="120" y1="140" x2="140" y2="170" stroke="black" stroke-width="2" class="body-part" id="right-leg"/>
+        </svg>
+        
+        <div class="word-display" id="word-display"></div>
+        
+        <div class="wrong-letters">
+            <p>Wrong letters: <span id="wrong-letters"></span></p>
+        </div>
+        
+        <div class="keyboard" id="keyboard"></div>
+        
+        <div class="game-over" id="game-over">
+            <h2 id="game-over-message"></h2>
+            <p>The word was: <span id="reveal-word"></span></p>
+            <button onclick="resetGame()">Play Again</button>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
